@@ -15,9 +15,26 @@ import random
 from locust import HttpLocust, TaskSet, task
 
 class MyTaskSet(TaskSet):
-    @task(1000)
+    @task(500)
     def index(self):
         response = self.client.get("/")
+
+    @task(25)
+    def discover(self):
+        self.client.get("/discover/")
+
+    @task(100)
+    def projects(self):
+        self.client.get("/projects/unitarian-church-of-staten-island/")
+
+    @task(10)
+    def blog(self):
+        self.client.get("/blog/")
+        self.client.get("/welcome-to-the-new-blocpower/")
+
+    @task(25)
+    def about(self):
+        self.client.get("/about-us/")
 
     # This task will 15 times for every 1000 runs of the above task
     # @task(15)
@@ -33,5 +50,5 @@ class MyTaskSet(TaskSet):
 class MyLocust(HttpLocust):
     host = os.getenv('TARGET_URL', "http://localhost")
     task_set = MyTaskSet
-    min_wait = 45
-    max_wait = 50
+    min_wait = 1000
+    max_wait = 10000
